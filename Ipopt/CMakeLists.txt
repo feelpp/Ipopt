@@ -112,7 +112,6 @@ prepend_dir(LinearSolverLoader_src src/contrib/LinearSolverLoader
 #   libseq/mpic.c
 #   libseq/elapse.c)
 
-
 add_library(ipoptfort ${mumps_src} ${LinearSolverLoader_src}
   src/Algorithm/LinearSolvers/IpMa28Partition.F)
 

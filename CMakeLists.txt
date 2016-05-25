@@ -645,6 +645,11 @@ if (BUILD_IPOPT)
   
   string(SUBSTRING ${CMAKE_SHARED_LIBRARY_SUFFIX} 1 -1 SHAREDLIBEXT)
 
+  message(STATUS "[feelpp] ipopt petsc : ${PETSC_INCLUDES}")
+  include_directories(${PETSC_INCLUDES})
+
+
+
   include_directories(
     Ipopt/src/contrib/LinearSolverLoader
     ThirdParty/Mumps/MUMPS/include ThirdParty/Mumps/MUMPS/libseq)
