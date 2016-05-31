@@ -1,7 +1,7 @@
 # CMake build script for COIN-OR projects.
 # Author: Victor Zverovich
 
-cmake_minimum_required(VERSION 2.8.7.20120206)
+cmake_minimum_required(VERSION 2.8.7)
 cmake_policy(VERSION ${CMAKE_MINIMUM_REQUIRED_VERSION})
 
 if (BUILD_SHARED_LIBS)
