@@ -641,7 +641,7 @@ if (BUILD_IPOPT)
   set(HAVE_LINEARSOLVERLOADER 1)
   set(BUILD_LINEARSOLVERLOADER 1)
   set(BUILD_PARDISOLOADER 1)
-  
+
   check_symbol_exists(drand48 stdlib.h HAVE_DRAND48)
   check_symbol_exists(rand stdlib.h HAVE_RAND)
   check_symbol_exists(std::rand cstdlib HAVE_STD__RAND)
@@ -649,7 +649,7 @@ if (BUILD_IPOPT)
   check_symbol_exists(_snprintf stdio.h HAVE__SNPRINTF)
   check_symbol_exists(va_copy stdarg.h HAVE_VA_COPY)
   check_symbol_exists(vsnprintf "stdio.h;stdarg.h" HAVE_VSNPRINTF)
-  
+
   string(SUBSTRING ${CMAKE_SHARED_LIBRARY_SUFFIX} 1 -1 SHAREDLIBEXT)
 
   message(STATUS "[feelpp] ipopt petsc : ${PETSC_INCLUDES}")
@@ -747,92 +747,92 @@ function(add_coin_test name dir lib)
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${dir})
 endfunction()
 
-if (BUILD_IPOPT AND EXISTS ${COIN_SOURCE_DIR}/Bonmin)
-  add_coin_library(Bonmin/src/Algorithms/Branching NAME bonbranching)
-  add_coin_library(Bonmin/src/Algorithms/QuadCuts NAME bonquadcuts)
-  add_coin_library(Bonmin/src/Algorithms/OaGenerators NAME bonoagenerators)
-  add_coin_library(Bonmin/src/Algorithms NAME bonalgorithms)
-  add_coin_library(Bonmin/src/Interfaces/Ipopt NAME ipoptinterface)
-  add_coin_library(Bonmin/src/Interfaces NAME bonmininterfaces)
-  add_coin_library(Bonmin/src/CbcBonmin/Heuristics NAME bonheuristics)
-  if (COIN_HAS_ASL)
-    add_coin_library(Bonmin/src/Algorithms/Ampl NAME bonamplsetup)
-    add_coin_library(Bonmin/src/Interfaces/Ampl NAME bonamplinterface)
-    add_dependencies(bonamplinterface ${ASL_LIBRARIES})
-    set(BONMIN_DEPS bonamplsetup bonamplinterface ${ASL_LIBRARIES})
-
-    add_executable(bonmin-executable Bonmin/src/Apps/BonMin.cpp)
-    set_target_properties(bonmin-executable PROPERTIES
-      COMPILE_DEFINITIONS BONMIN_BUILD OUTPUT_NAME bonmin IMPORT_PREFIX imp)
-    target_link_libraries(bonmin-executable bonmin)
-  endif ()
-  add_coin_library(Bonmin/src/CbcBonmin NAME bonmin
-    bonalgorithms bonbranching bonquadcuts bonoagenerators
-    bonmininterfaces ipoptinterface feelpp_ipopt bonheuristics CbcSolver ${BONMIN_DEPS})
-  target_include_directories(bonmin PUBLIC Bonmin/src/Interfaces/Ampl)
-
-  add_coin_test(Bonmin-unitTest Bonmin/test bonmin InterfaceTest.cpp)
-  add_coin_test(Bonmin-CppExample Bonmin/examples/CppExample
-    bonmin MyBonmin.cpp MyTMINLP.cpp MyTMINLP.hpp)
-
-  configure(Bonmin src/Interfaces/config.h src/Interfaces/config_bonmin.h)
-endif ()
-
-function(add_couenne_library name path)
-  add_coin_library(Couenne/src/${path} NAME ${name})
-  set_target_properties(${name} PROPERTIES COMPILE_DEFINITIONS COUENNE_BUILD)
-endfunction()
-
-if (BUILD_IPOPT AND EXISTS ${COIN_SOURCE_DIR}/Couenne)
-  include_directories(
-    Couenne/src Couenne/src/main
-    Couenne/src/expression/operators
-    Couenne/src/expression/operators/bounds
-    Couenne/src/expression/partial
-    Couenne/src/problem/depGraph)
-  add_couenne_library(CouenneUtil util)
-  add_couenne_library(CouenneExpression expression)
-  add_couenne_library(CouenneStandardize standardize)
-  add_couenne_library(CouenneProblem problem)
-  add_couenne_library(CouenneBoundTightening bound_tightening)
-  add_couenne_library(CouenneTwoImplied bound_tightening/twoImpliedBT)
-  add_couenne_library(CouenneConvex convex)
-  add_couenne_library(CouenneBranch branch)
-  add_couenne_library(CouenneDisjunctive disjunctive)
-  add_couenne_library(CouenneInterfaces interfaces)
-  add_couenne_library(CouenneHeuristics heuristics)
-  add_couenne_library(CouenneCrossConv cut/crossconv)
-  add_couenne_library(CouenneSdpCuts cut/sdpcuts)
-
-  if (COIN_HAS_ASL)
-    set(COUENNEINTERFACE_FROM_ASL 1)
-    add_dependencies(CouenneProblem asl)
-  endif ()
-
-  set(DEPENDENCY_LINKING 1)
-  add_coin_library(Couenne/src NAME Couenne
-    CouenneInterfaces CouenneHeuristics CouenneProblem CouenneStandardize
-    CouenneExpression CouenneBranch CouenneConvex CouenneBoundTightening
-    CouenneTwoImplied CouenneUtil CouenneDisjunctive CouenneCrossConv CouenneSdpCuts
-    bonmin)
-  if (NOT WIN32)
-    target_link_libraries(Couenne lapack)
-  endif ()
-
-  add_executable(couenne-executable Couenne/src/main/BonCouenne.cpp)
-  set_target_properties(couenne-executable PROPERTIES
-    COMPILE_DEFINITIONS COUENNE_BUILD OUTPUT_NAME couenne IMPORT_PREFIX imp)
-  target_link_libraries(couenne-executable Couenne)
-
-  set(srcdir ${CMAKE_CURRENT_SOURCE_DIR}/Couenne/test)
-  configure_file(Couenne/test/grandTest.sh.in Couenne/test/grandTest.sh @ONLY)
-  add_test(NAME Couenne-grandTest
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/Couenne/test.cmake
-            $<TARGET_FILE:couenne-executable>
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Couenne)
-
-  configure(Couenne src/config.h src/config_couenne.h)
-endif ()
+#if (BUILD_IPOPT AND EXISTS ${COIN_SOURCE_DIR}/Bonmin)
+#  add_coin_library(Bonmin/src/Algorithms/Branching NAME bonbranching)
+#  add_coin_library(Bonmin/src/Algorithms/QuadCuts NAME bonquadcuts)
+#  add_coin_library(Bonmin/src/Algorithms/OaGenerators NAME bonoagenerators)
+#  add_coin_library(Bonmin/src/Algorithms NAME bonalgorithms)
+#  add_coin_library(Bonmin/src/Interfaces/Ipopt NAME ipoptinterface)
+#  add_coin_library(Bonmin/src/Interfaces NAME bonmininterfaces)
+#  add_coin_library(Bonmin/src/CbcBonmin/Heuristics NAME bonheuristics)
+#  if (COIN_HAS_ASL)
+#    add_coin_library(Bonmin/src/Algorithms/Ampl NAME bonamplsetup)
+#    add_coin_library(Bonmin/src/Interfaces/Ampl NAME bonamplinterface)
+#    add_dependencies(bonamplinterface ${ASL_LIBRARIES})
+#    set(BONMIN_DEPS bonamplsetup bonamplinterface ${ASL_LIBRARIES})
+#
+#    add_executable(bonmin-executable Bonmin/src/Apps/BonMin.cpp)
+#    set_target_properties(bonmin-executable PROPERTIES
+#      COMPILE_DEFINITIONS BONMIN_BUILD OUTPUT_NAME bonmin IMPORT_PREFIX imp)
+#    target_link_libraries(bonmin-executable bonmin)
+#  endif ()
+#  add_coin_library(Bonmin/src/CbcBonmin NAME bonmin
+#    bonalgorithms bonbranching bonquadcuts bonoagenerators
+#    bonmininterfaces ipoptinterface feelpp_ipopt bonheuristics CbcSolver ${BONMIN_DEPS})
+#  target_include_directories(bonmin PUBLIC Bonmin/src/Interfaces/Ampl)
+#
+#  add_coin_test(Bonmin-unitTest Bonmin/test bonmin InterfaceTest.cpp)
+#  add_coin_test(Bonmin-CppExample Bonmin/examples/CppExample
+#    bonmin MyBonmin.cpp MyTMINLP.cpp MyTMINLP.hpp)
+#
+#  configure(Bonmin src/Interfaces/config.h src/Interfaces/config_bonmin.h)
+#endif ()
+#
+#function(add_couenne_library name path)
+#  add_coin_library(Couenne/src/${path} NAME ${name})
+#  set_target_properties(${name} PROPERTIES COMPILE_DEFINITIONS COUENNE_BUILD)
+#endfunction()
+#
+#if (BUILD_IPOPT AND EXISTS ${COIN_SOURCE_DIR}/Couenne)
+#  include_directories(
+#    Couenne/src Couenne/src/main
+#    Couenne/src/expression/operators
+#    Couenne/src/expression/operators/bounds
+#    Couenne/src/expression/partial
+#    Couenne/src/problem/depGraph)
+#  add_couenne_library(CouenneUtil util)
+#  add_couenne_library(CouenneExpression expression)
+#  add_couenne_library(CouenneStandardize standardize)
+#  add_couenne_library(CouenneProblem problem)
+#  add_couenne_library(CouenneBoundTightening bound_tightening)
+#  add_couenne_library(CouenneTwoImplied bound_tightening/twoImpliedBT)
+#  add_couenne_library(CouenneConvex convex)
+#  add_couenne_library(CouenneBranch branch)
+#  add_couenne_library(CouenneDisjunctive disjunctive)
+#  add_couenne_library(CouenneInterfaces interfaces)
+#  add_couenne_library(CouenneHeuristics heuristics)
+#  add_couenne_library(CouenneCrossConv cut/crossconv)
+#  add_couenne_library(CouenneSdpCuts cut/sdpcuts)
+#
+#  if (COIN_HAS_ASL)
+#    set(COUENNEINTERFACE_FROM_ASL 1)
+#    add_dependencies(CouenneProblem asl)
+#  endif ()
+#
+#  set(DEPENDENCY_LINKING 1)
+#  add_coin_library(Couenne/src NAME Couenne
+#    CouenneInterfaces CouenneHeuristics CouenneProblem CouenneStandardize
+#    CouenneExpression CouenneBranch CouenneConvex CouenneBoundTightening
+#    CouenneTwoImplied CouenneUtil CouenneDisjunctive CouenneCrossConv CouenneSdpCuts
+#    bonmin)
+#  if (NOT WIN32)
+#    target_link_libraries(Couenne lapack)
+#  endif ()
+#
+#  add_executable(couenne-executable Couenne/src/main/BonCouenne.cpp)
+#  set_target_properties(couenne-executable PROPERTIES
+#    COMPILE_DEFINITIONS COUENNE_BUILD OUTPUT_NAME couenne IMPORT_PREFIX imp)
+#  target_link_libraries(couenne-executable Couenne)
+#
+#  set(srcdir ${CMAKE_CURRENT_SOURCE_DIR}/Couenne/test)
+#  configure_file(Couenne/test/grandTest.sh.in Couenne/test/grandTest.sh @ONLY)
+#  add_test(NAME Couenne-grandTest
+#    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/Couenne/test.cmake
+#            $<TARGET_FILE:couenne-executable>
+#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Couenne)
+#
+#  configure(Couenne src/config.h src/config_couenne.h)
+#endif ()
 
 # Fix paths to libstdc++ on OS X.
 if (APPLE)
