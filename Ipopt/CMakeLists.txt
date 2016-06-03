@@ -112,15 +112,15 @@ prepend_dir(LinearSolverLoader_src src/contrib/LinearSolverLoader
 #   libseq/mpic.c
 #   libseq/elapse.c)
 
-add_library(ipoptfort ${mumps_src} ${LinearSolverLoader_src}
+add_library(feelpp_ipoptfort ${mumps_src} ${LinearSolverLoader_src}
   src/Algorithm/LinearSolvers/IpMa28Partition.F)
 
 find_package(Threads)
-target_link_libraries(ipoptfort ${PETSC_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(feelpp_ipoptfort ${PETSC_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 find_library(DL_LIBRARY dl)
 if (DL_LIBRARY)
-  target_link_libraries(ipoptfort ${DL_LIBRARY})
+  target_link_libraries(feelpp_ipoptfort ${DL_LIBRARY})
 endif ()
 
 if (NOT CMAKE_GNUtoMS)

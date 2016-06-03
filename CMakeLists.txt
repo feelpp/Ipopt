@@ -195,14 +195,21 @@ function(coin_get_sources path name var noinst_var)
           set(sources ${sources} ${path}/${src})
         endif ()
       endforeach ()
-    elseif (line MATCHES "^includecoin_HEADERS \\+?= (.*)")
+    elseif (line MATCHES "^includeipopt_HEADERS \\+?= (.*)")
       string(REGEX MATCHALL "[^ \t]+" header_list "${CMAKE_MATCH_1}")
       set(headers )
       foreach (header ${header_list})
         set(headers ${headers} ${path}/${header})
       endforeach ()
+      message("Generate IPOpt headers")
+      #file(MAKE_DIRECTORY include/coin)
+      file(COPY ${headers} DESTINATION include/coin)
       install(FILES ${headers} DESTINATION include/coin)
     elseif (line MATCHES "\\$\\(install_sh_DATA\\) +([a-zA-Z_]+\\.hp?p?) +[A-Za-z_$()]+/([A-Za-z_]+.hp?p?)")
+      message("Generate IPOpt config headers")
+      #file(MAKE_DIRECTORY include/coin)
+      file(RENAME ${path}/${CMAKE_MATCH_1} ${CMAKE_MATCH_2})
+      file(COPY ${CMAKE_MATCH_2} DESTINATION include/coin)
       install(FILES ${path}/${CMAKE_MATCH_1} RENAME ${CMAKE_MATCH_2} DESTINATION include/coin)
     endif ()
   endforeach ()
@@ -587,7 +594,7 @@ function(add_ipopt_test name)
     set(sources ${sources} ${source_dir}/Ipopt/examples/${name}/${arg})
   endforeach ()
   add_executable(${name} ${sources})
-  target_link_libraries(${name} ipopt)
+  target_link_libraries(${name} feelpp_ipopt)
   set_target_properties(${name}
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${COIN_BINARY_DIR}/bin)
 endfunction()
@@ -662,12 +669,12 @@ if (BUILD_IPOPT)
       PROJECT IPOPTFORT
       ARCHIVE_DIR Ipopt/lib
       RUNTIME_DIR Ipopt/bin
-      LIBRARIES ipoptfort
+      LIBRARIES feelpp_ipoptfort
       CMAKE_COMMAND_LINE ${FORTRAN_CMAKE_FLAGS}
       NO_EXTERNAL_INSTALL)
     set(COIN_HAS_BLAS 1)
     set(COIN_HAS_MUMPS 1)
-    set(IPOPTFORT ipoptfort)
+    set(IPOPTFORT feelpp_ipoptfort)
   endif ()
 
   # Adds a command to copy external library ${lib} to the binary directory.
@@ -682,7 +689,7 @@ if (BUILD_IPOPT)
 
   # Copy external libraries.
   if (MSVC)
-    add_copy_library_command(${COIN_BINARY_DIR}/Ipopt/bin/libipoptfort.dll)
+    add_copy_library_command(${COIN_BINARY_DIR}/Ipopt/bin/libfeelpp_ipoptfort.dll)
   endif ()
 
   add_ipopt_library(ipoptalg Algorithm)
@@ -691,17 +698,17 @@ if (BUILD_IPOPT)
   add_ipopt_library(cgpenalty contrib/CGPenalty)
   add_ipopt_library(linalg LinAlg)
   add_ipopt_library(tmatrices LinAlg/TMatrices)
-  add_ipopt_library(ipopt Interfaces
+  add_ipopt_library(feelpp_ipopt Interfaces
     ipoptalg linsolvers common cgpenalty linalg tmatrices ${IPOPTFORT})
 
   if (COIN_HAS_ASL)
     add_ipopt_library(ipoptamplinterface Apps/AmplSolver ${ASL_LIBRARIES})
-    target_link_libraries(ipopt ipoptamplinterface)
+    target_link_libraries(feelpp_ipopt ipoptamplinterface)
     add_executable(ipopt-executable
       Ipopt/src/Apps/AmplSolver/ampl_ipopt.cpp ${IPOPT_EXTERNAL_LIBS})
-    target_link_libraries(ipopt-executable ipopt)
+    target_link_libraries(ipopt-executable ipopt_feelpp)
     set_target_properties(ipopt-executable PROPERTIES
-      COMPILE_DEFINITIONS IPOPT_BUILD OUTPUT_NAME ipopt IMPORT_PREFIX imp)
+      COMPILE_DEFINITIONS IPOPT_BUILD OUTPUT_NAME feelpp_ipopt IMPORT_PREFIX imp)
 
     if (NOT WIN32)
       add_test(NAME Ipopt-amplTest
@@ -761,7 +768,7 @@ if (BUILD_IPOPT AND EXISTS ${COIN_SOURCE_DIR}/Bonmin)
   endif ()
   add_coin_library(Bonmin/src/CbcBonmin NAME bonmin
     bonalgorithms bonbranching bonquadcuts bonoagenerators
-    bonmininterfaces ipoptinterface ipopt bonheuristics CbcSolver ${BONMIN_DEPS})
+    bonmininterfaces ipoptinterface feelpp_ipopt bonheuristics CbcSolver ${BONMIN_DEPS})
   target_include_directories(bonmin PUBLIC Bonmin/src/Interfaces/Ampl)
 
   add_coin_test(Bonmin-unitTest Bonmin/test bonmin InterfaceTest.cpp)
@@ -857,4 +864,5 @@ endif ()
 install(TARGETS ${COIN_INSTALL_TARGETS}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
   ARCHIVE DESTINATION lib)
