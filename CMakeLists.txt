@@ -706,7 +706,7 @@ if (BUILD_IPOPT)
     target_link_libraries(feelpp_ipopt ipoptamplinterface)
     add_executable(ipopt-executable
       Ipopt/src/Apps/AmplSolver/ampl_ipopt.cpp ${IPOPT_EXTERNAL_LIBS})
-    target_link_libraries(ipopt-executable ipopt_feelpp)
+    target_link_libraries(ipopt-executable feelpp_ipopt)
     set_target_properties(ipopt-executable PROPERTIES
       COMPILE_DEFINITIONS IPOPT_BUILD OUTPUT_NAME feelpp_ipopt IMPORT_PREFIX imp)
 
@@ -861,6 +861,7 @@ if (COIN_HAS_ASL)
   endforeach ()
 endif ()
 
+message(STATUS "[ipopt] install targets: ${COIN_INSTALL_TARGETS}")
 install(TARGETS ${COIN_INSTALL_TARGETS}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
