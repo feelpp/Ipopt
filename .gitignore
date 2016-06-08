@@ -1,3 +1,4 @@
+IpoptConfig.h
 /Ipopt/src/Algorithm/CMakeLists.txt
 /Ipopt/src/CMakeLists.txt
 /Ipopt/src/Common/config.h
