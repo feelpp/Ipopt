@@ -23,9 +23,9 @@ includeipopt_HEADERS = \
 	IpTNLPAdapter.hpp \
 	IpTNLPReducer.hpp
 
-lib_LTLIBRARIES = libipopt.la
+lib_LTLIBRARIES = libfeelpp_ipopt.la
 
-libipopt_la_SOURCES = \
+libfeelpp_ipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
 	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
 	IpIpoptApplication.cpp IpIpoptApplication.hpp \
@@ -40,14 +40,14 @@ libipopt_la_SOURCES = \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
-libipopt_la_LIBADD = $(IPALLLIBS)
+libfeelpp_ipopt_la_LIBADD = $(IPALLLIBS)
 if DEPENDENCY_LINKING
-libipopt_la_LIBADD += $(IPOPTLIB_LIBS)
+libfeelpp_ipopt_la_LIBADD += $(IPOPTLIB_LIBS)
 endif
 
-libipopt_la_DEPENDENCIES = $(IPALLLIBS)
+libfeelpp_ipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
-libipopt_la_LDFLAGS = $(LT_LDFLAGS)
+libfeelpp_ipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
