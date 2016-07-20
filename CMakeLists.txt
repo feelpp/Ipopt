@@ -861,6 +861,16 @@ if (COIN_HAS_ASL)
   endforeach ()
 endif ()
 
+# Link lapack to avail IPOpt quasi-newton methods.
+# FindLAPACK module provide LAPACK_FOUND (see feelpp.dependencies.cmake).
+Find_Package(LAPACK)
+if(LAPACK_FOUND)
+    message( STATUS "[ipopt] LAPACK found!" )
+    SET(COIN_HAS_LAPACK 1 CACHE STRING "Enable LAPACK for Ipopt")
+else()
+    message( WARNING "[ipopt] LAPACK not found. Quasi-Newton method will be disabled." )
+endif()
+
 message(STATUS "[ipopt] install targets: ${COIN_INSTALL_TARGETS}")
 install(TARGETS ${COIN_INSTALL_TARGETS}
   LIBRARY DESTINATION lib
