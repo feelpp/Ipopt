@@ -8,6 +8,16 @@ if (BUILD_SHARED_LIBS)
   set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 endif ()
 
+# Link lapack to avail IPOpt quasi-newton methods.
+# FindLAPACK module provide LAPACK_FOUND (see feelpp.dependencies.cmake).
+Find_Package(LAPACK)
+if(LAPACK_FOUND)
+    message( STATUS "[ipopt] LAPACK found!" )
+    SET(COIN_HAS_LAPACK 1 CACHE STRING "Enable LAPACK for Ipopt")
+else()
+    message( WARNING "[ipopt] LAPACK not found. Quasi-Newton method will be disabled." )
+endif()
+
 set(MP_DIR ThirdParty/mp)
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${MP_DIR}/CMakeLists.txt)
   include(${CMAKE_CURRENT_SOURCE_DIR}/${MP_DIR}/support/cmake/init.cmake)
@@ -860,16 +870,6 @@ if (COIN_HAS_ASL)
     endif ()
   endforeach ()
 endif ()
-
-# Link lapack to avail IPOpt quasi-newton methods.
-# FindLAPACK module provide LAPACK_FOUND (see feelpp.dependencies.cmake).
-Find_Package(LAPACK)
-if(LAPACK_FOUND)
-    message( STATUS "[ipopt] LAPACK found!" )
-    SET(COIN_HAS_LAPACK 1 CACHE STRING "Enable LAPACK for Ipopt")
-else()
-    message( WARNING "[ipopt] LAPACK not found. Quasi-Newton method will be disabled." )
-endif()
 
 message(STATUS "[ipopt] install targets: ${COIN_INSTALL_TARGETS}")
 install(TARGETS ${COIN_INSTALL_TARGETS}
