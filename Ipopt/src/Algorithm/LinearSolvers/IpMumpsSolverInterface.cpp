@@ -12,7 +12,7 @@
 
 // The following line is a fix for otherwise twice-defined global variable
 // (This would have to be taken out for a parallel MUMPS version!)
-#define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
+//#define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
 // The first header to include is the one for MPI.  
 #include "mpi.h"
 
@@ -56,6 +56,7 @@ namespace Ipopt
                    dbg_verbosity);
     //initialize mumps
     DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
+#if 0
 #ifndef MUMPS_MPI_H
 #if defined(HAVE_MPI_INITIALIZED)
     int mpi_initialized;
@@ -74,6 +75,7 @@ namespace Ipopt
     int myid;
     MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 #endif
+#endif
     mumps_->n = 0;
     mumps_->nz = 0;
     mumps_->a = NULL;
@@ -82,7 +84,9 @@ namespace Ipopt
     mumps_->job = -1;//initialize mumps
     mumps_->par = 1;//working host for sequential version
     mumps_->sym = 2;//general symetric matrix
-    mumps_->comm_fortran = USE_COMM_WORLD;
+    // mumps_->comm_fortran = USE_COMM_WORLD;
+    // Needs to convert to a fortran communicator to use less processors.
+    mumps_->comm_fortran = (MUMPS_INT) MPI_Comm_c2f( MPI_COMM_SELF );
     dmumps_c(mumps_);
     mumps_->icntl[1] = 0;
     mumps_->icntl[2] = 0;//QUIETLY!
@@ -99,6 +103,7 @@ namespace Ipopt
     DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     mumps_->job = -2; //terminate mumps
     dmumps_c(mumps_);
+#if 0
 #ifndef MUMPS_MPI_H
 #ifdef HAVE_MPI_INITIALIZED
     if( instancecount_mpi == 1 )
@@ -109,6 +114,7 @@ namespace Ipopt
        MPI_Finalize();
     }
     --instancecount_mpi;
+#endif
 #endif
 #endif
     delete [] mumps_->a;
