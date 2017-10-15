@@ -129,3 +129,8 @@ endif ()
 
 set(BUILD_SHARED_LIBS False)
 #add_subdirectory(../ThirdParty/lapack lapack)
+install(TARGETS feelpp_ipoptfort
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+  ARCHIVE DESTINATION lib)
