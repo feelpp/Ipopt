@@ -12,7 +12,6 @@ if (SH_PROGRAM)
   string(REPLACE "/" "\\" path ${path})
   string(REPLACE "${path}" "" path "$ENV{PATH}")
   set(ENV{PATH} "${path}")
-  message("PATH: $ENV{PATH}")
 endif ()
 
 project(IPOPTFORT C)
@@ -122,6 +121,12 @@ find_library(DL_LIBRARY dl)
 if (DL_LIBRARY)
   target_link_libraries(feelpp_ipoptfort ${DL_LIBRARY})
 endif ()
+
+install(TARGETS feelpp_ipoptfort
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+  ARCHIVE DESTINATION lib)
 
 if (NOT CMAKE_GNUtoMS)
   add_ipopt_test(hs071_f SOURCE_DIR ${COIN_BINARY_DIR} hs071_f.f)
