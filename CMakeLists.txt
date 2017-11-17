@@ -883,6 +883,7 @@ install(TARGETS ${COIN_INSTALL_TARGETS}
   ARCHIVE DESTINATION lib)
 
 install(TARGETS feelpp_ipopt
+  EXPORT feelpp-contrib-export-targets
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include

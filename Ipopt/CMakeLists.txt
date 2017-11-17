@@ -123,6 +123,7 @@ if (DL_LIBRARY)
 endif ()
 
 install(TARGETS feelpp_ipoptfort
+  EXPORT feelpp-contrib-export-targets
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
